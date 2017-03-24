@@ -116,10 +116,6 @@ def RVobj():  # noqa
         def get(self):
             return Obj()
 
-        @asyncio.coroutine
-        def post(self):
-            return Response()
-
     return RVobj
 
 
