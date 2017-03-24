@@ -100,9 +100,6 @@ def test_RESTView__response(loop, RVw):  # noqa
     resp = loop.run_until_complete(RVw(request, resource, tail)())
     assert isinstance(resp, Response)
 
-class Obj:
-    def __init__(self):
-        self.test = 'test'
 
 @pytest.fixture
 def RVobj():  # noqa
@@ -110,11 +107,11 @@ def RVobj():  # noqa
         methods = {'get', 'post'}
 
         def serialize(self, data):
-            return data.test.encode('utf8')
+            return data.upper().encode('utf8')
 
         @asyncio.coroutine
         def get(self):
-            return Obj()
+            return "test"
 
     return RVobj
 
@@ -127,4 +124,4 @@ def test_RESTView__object(loop, RVobj):  # noqa
 
     resp = loop.run_until_complete(RVobj(request, resource, tail)())
     assert isinstance(resp, Response)
-    assert resp.body == b'test'
+    assert resp.body == b'TEST'
