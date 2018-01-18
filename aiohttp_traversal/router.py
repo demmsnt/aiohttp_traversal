@@ -3,6 +3,8 @@ import logging
 import sys
 import types
 
+from contextlib import contextmanager
+
 from aiohttp.abc import AbstractRouter, AbstractMatchInfo
 from aiohttp.web_exceptions import HTTPNotFound
 
@@ -30,6 +32,9 @@ class ViewNotResolved(Exception):
 class BaseMatchInfo(AbstractMatchInfo):
     route = None
 
+    def __init__(self):
+        self._app = None
+
     @asyncio.coroutine
     def expect_handler(self, request):
         return None
@@ -47,6 +52,11 @@ class BaseMatchInfo(AbstractMatchInfo):
 
     def freeze(self):
         pass
+
+    @contextmanager
+    def set_current_app(self, app):
+        self._app = app
+        yield
 
 
 class MatchInfo(BaseMatchInfo):
